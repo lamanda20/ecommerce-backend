@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@flydotio/litestream": "^1.0.1",
     "@prisma/client": "^6.19.1",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
@@ -27,6 +28,8 @@
   },
   "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
   "build": "tsc",
-  "start": "node dist/server.js"
-
+  "start": "node dist/server.js",
+  "dockerfile": {
+    "litestream": true
+  }
 }
