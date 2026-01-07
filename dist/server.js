@@ -8,10 +8,11 @@ const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
+// TEST ROUTE (OBLIGATOIRE)
 app.get("/", (req, res) => {
     res.send("Backend is running 🚀");
 });
-const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => {
-    console.log(`Server listening on port ${PORT}`);
+const PORT = Number(process.env.PORT) || 4000;
+app.listen(PORT, "0.0.0.0", () => {
+    console.log(`Server running on port ${PORT}`);
 });
