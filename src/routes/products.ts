@@ -1,11 +1,9 @@
 
-import prisma from "../prisma";
-import { z } from "zod";
 import { Router } from "express";
 
 const router = Router();
 
-// 🔥 PRODUITS MOCKÉS (pas de DB)
+
 const products = [
     {
         id: 1,
@@ -27,12 +25,12 @@ const products = [
     }
 ];
 
-// GET /products
+
 router.get("/", (_req, res) => {
     res.json(products);
 });
 
-// GET /products/:id
+
 router.get("/:id", (req, res) => {
     const id = Number(req.params.id);
     const product = products.find(p => p.id === id);

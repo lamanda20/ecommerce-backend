@@ -4,8 +4,6 @@ import { z } from "zod";
 
 const router = Router();
 
-// Simple in-memory carts map keyed by cartId (from header `x-cart-id`).
-// Each cart is an array of items with productId, variant (optional), and quantity.
 type CartItem = {
     productId: number;
     variant?: string;
@@ -15,7 +13,7 @@ type CartItem = {
 const carts = new Map<string, CartItem[]>();
 
 function getCartId(req: any) {
-    // Accept cart id from header or query; fall back to 'default'
+
     return (req.header("x-cart-id") || req.query.cartId || "default") as string;
 }
 
@@ -36,7 +34,7 @@ const RemoveSchema = z.object({
     quantity: z.number().int().min(1).optional(),
 });
 
-// GET /cart - returns the cart for the provided cart id
+
 router.get("/", async (req, res) => {
     const cartId = getCartId(req);
     const cart = getOrCreateCart(cartId);
@@ -57,7 +55,7 @@ router.get("/", async (req, res) => {
     res.json({ cartId, items });
 });
 
-// POST /cart/add - add item to cart
+
 router.post("/add", async (req, res) => {
     const parsed = AddSchema.safeParse(req.body);
     if (!parsed.success) return res.status(400).json({ error: parsed.error.flatten() });
@@ -76,7 +74,7 @@ router.post("/add", async (req, res) => {
                 return res.status(400).json({ error: "Invalid variant" });
             }
         } catch (e) {
-            // ignore parsing errors and allow
+
         }
     }
 
@@ -93,7 +91,7 @@ router.post("/add", async (req, res) => {
     res.status(200).json({ cartId, items: cart });
 });
 
-// POST /cart/remove - remove or decrease quantity
+
 router.post("/remove", async (req, res) => {
     const parsed = RemoveSchema.safeParse(req.body);
     if (!parsed.success) return res.status(400).json({ error: parsed.error.flatten() });
@@ -117,7 +115,6 @@ router.post("/remove", async (req, res) => {
     res.json({ cartId, items: cart });
 });
 
-// POST /cart/clear - clear the cart
 router.post("/clear", (req, res) => {
     const cartId = getCartId(req);
     carts.set(cartId, []);
