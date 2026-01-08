@@ -45,12 +45,11 @@ router.get("/", async (req, res) => {
 });
 // POST /cart/add - add item to cart
 router.post("/add", async (req, res) => {
-    var _a;
     const parsed = AddSchema.safeParse(req.body);
     if (!parsed.success)
         return res.status(400).json({ error: parsed.error.flatten() });
     const { productId, variant } = parsed.data;
-    const quantity = (_a = parsed.data.quantity) !== null && _a !== void 0 ? _a : 1;
+    const quantity = parsed.data.quantity ?? 1;
     const product = await prisma_1.default.product.findUnique({ where: { id: productId } });
     if (!product)
         return res.status(404).json({ error: "Product not found" });
@@ -79,12 +78,11 @@ router.post("/add", async (req, res) => {
 });
 // POST /cart/remove - remove or decrease quantity
 router.post("/remove", async (req, res) => {
-    var _a;
     const parsed = RemoveSchema.safeParse(req.body);
     if (!parsed.success)
         return res.status(400).json({ error: parsed.error.flatten() });
     const { productId, variant } = parsed.data;
-    const quantity = (_a = parsed.data.quantity) !== null && _a !== void 0 ? _a : null; // null means remove fully
+    const quantity = parsed.data.quantity ?? null; // null means remove fully
     const cartId = getCartId(req);
     const cart = getOrCreateCart(cartId);
     const idx = cart.findIndex((i) => i.productId === productId && i.variant === variant);
